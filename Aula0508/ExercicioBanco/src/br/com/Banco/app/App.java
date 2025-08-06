@@ -2,6 +2,7 @@ package br.com.Banco.app;
 
 import java.io.BufferedWriter;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -30,9 +31,29 @@ public class App {
         double saldo = Double.parseDouble(dados[2]);
 
         // Criar conta
+        ArrayList <ContaCorrente> Contas = new ArrayList<>();
         ContaCorrente c = new ContaCorrente(num, nome, saldo);
 
         Scanner sc = new Scanner(System.in);
+        System.out.println("\n[0] - Entrar\n[1] - Criar conta\n[2] - Sair");
+        int entrar = sc.nextInt();
+
+        switch (entrar) {
+            case 0:
+                
+                break;
+        
+            case 1:
+                
+                break;
+
+            case 2:
+                System.out.println("Obrigado por usar o banco Leonel. Até logo!");
+                        return;
+                
+            default:
+                break;
+        }
 
         // Operações
         System.out.println("Bem-vindo: " + nome);
