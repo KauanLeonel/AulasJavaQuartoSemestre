@@ -50,8 +50,19 @@ public class MainFrame extends JFrame {
     }
 
     private JPanel createLoginPanel() {
+
         JPanel panel = new JPanel(); // Cria o painel
         panel.setLayout(null); // layout absoluto, mais controle manual (pode usar outros)
+
+        ImageIcon icon = new ImageIcon(
+                getClass().getResource("/br/com/Banco/imgs/c9486f2a-c84b-4128-9967-164aa7749ccb.png"));
+        Image img = icon.getImage();
+        Image resized = img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resized);
+        JLabel labelImagem = new JLabel(resizedIcon);
+        labelImagem.setBounds(150, 10, 100, 100); // posição e tamanho da imagem
+
+        panel.add(labelImagem);
 
         JLabel labelCpf = new JLabel("CPF:"); // Caixa de texto para o usuário ver
         labelCpf.setBounds(50, 30, 80, 25); // Tamanho
