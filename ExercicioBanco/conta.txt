@@ -1,1 +1,7 @@
-324,KauanLeonel,0
+324,KauanLeonel,0.0,teste
+111,KauanLeonel,3434.0,teste
+222,Teste2,3434.0,teste
+333,Cabaço,3454.0,teste
+444,Teste,34343.0,teste
+999,Kauan,40.0,teste
+888,teste2,0.0,teste

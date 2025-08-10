@@ -5,13 +5,13 @@ import br.com.Banco.Exception.SaldoInsuficienteException;
 public abstract class Conta {
 
     // Atributos
-    private int numero;
+    private String cpf;
     private String titular;
     private double saldo;
 
     // Construtor
-    public Conta(int numero, String titular, double saldo) {
-        this.numero = numero;
+    public Conta(String cpf, String titular, double saldo) {
+        this.cpf = cpf;
         this.titular = titular;
         this.saldo = saldo;
     }
@@ -25,17 +25,17 @@ public abstract class Conta {
 
     // Imprimir dados
     public void imprimirDados() {
-        System.out.println("Número: " + numero + "\nTitular: " + titular + "\nSaldo: " + saldo);
+        System.out.println("Número: " + cpf + "\nTitular: " + titular + "\nSaldo: " + saldo);
     }
 
     // #region Getters and Setters
     
-    public int getNumero() {
-        return numero;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getTitular() {

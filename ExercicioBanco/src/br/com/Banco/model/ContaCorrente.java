@@ -4,10 +4,20 @@ package br.com.Banco.model;
 import br.com.Banco.Exception.SaldoInsuficienteException;
 
 public class ContaCorrente extends Conta {
-    
-    //Precisa ter um construtor na classe, visto que tem no pai
-     public ContaCorrente(int numero, String titular, double saldo) {
-        super(numero, titular, saldo);
+    private String senha;
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+     //Precisa ter um construtor na classe, visto que tem no pai
+     public ContaCorrente(String cpf, String titular, double saldo, String senha) {
+        super(cpf, titular, saldo);
+        this.senha = senha;
     }
 
     @Override
