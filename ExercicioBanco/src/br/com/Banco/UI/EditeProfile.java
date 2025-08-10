@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -79,7 +80,7 @@ public class EditeProfile extends JFrame{
 
         JButton btnSalvar = new JButton("Salvar");
         btnSalvar.setBounds(190, 220, 120, 30);
-        btnSalvar.addActionListener(e -> salvar(cpf));
+        btnSalvar.addActionListener(e -> verificacao(password, newPassword, newPasswordConfirm, cpf));
 
         panel.add(btnSalvar);
 
@@ -93,10 +94,30 @@ public class EditeProfile extends JFrame{
         return;
     }
 
+    private void verificacao(JTextField password, JTextField newPassword, JTextField newPasswordConfirm, String cpf){
+        String senha = password.getText();
+        String novaSenha = newPassword.getText();
+        String novaSenhaConfirmacao = newPasswordConfirm.getText();
+        if(senha.isEmpty() && novaSenha.isEmpty() && novaSenhaConfirmacao.isEmpty()){
+            salvar(cpf);
+        } else{
+           SearchCpf busca = new SearchCpf();
+        int user = busca.search(listaDeContas, cpf);
+        if(senha.equals(listaDeContas.get(user).getSenha()) && novaSenha.equals(novaSenhaConfirmacao) && !novaSenha.isEmpty() && !novaSenhaConfirmacao.isEmpty()){
+            salvar(cpf);
+        } else{
+                        JOptionPane.showMessageDialog(this, "Algo está errado", "Erro", JOptionPane.ERROR_MESSAGE);
+
+        }
+        }
+    }
+
      private void salvar(String cpf) {
         String nome = nameLabel.getText();
+        String senha = newPassword.getText();
         SearchCpf busca = new SearchCpf();
         int user = busca.search(listaDeContas, cpf);
+        listaDeContas.get(user).setSenha(senha);
         listaDeContas.get(user).setTitular(nome);
         SalvarDados save = new SalvarDados();
         save.salvar(listaDeContas);
