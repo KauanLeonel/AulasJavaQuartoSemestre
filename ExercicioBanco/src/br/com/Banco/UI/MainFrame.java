@@ -4,7 +4,10 @@ import javax.swing.*;
 import java.util.List;
 
 import br.com.Banco.app.Inicializador;
+import br.com.Banco.app.ReproduzirAudios;
 import br.com.Banco.app.SalvarDados;
+import br.com.Banco.app.SearchCpf;
+import br.com.Banco.app.validacaoCpf;
 import br.com.Banco.model.Conta;
 import br.com.Banco.model.ContaCorrente;
 
@@ -26,17 +29,22 @@ public class MainFrame extends JFrame {
     private JTextField novoCpfField;
     private JTextField novoNomeField;
     private JPasswordField novaSenhaField;
+    ReproduzirAudios audio = new ReproduzirAudios();
+    SearchCpf procurar = new SearchCpf();
 
     public MainFrame(List<ContaCorrente> listaDeContas) {
         super("Banco - Sistema de Login");
         this.listaDeContas = listaDeContas;
+
+        // Áudio
+        audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\welcome.wav");
 
         // Configura janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // JFrame.EXIT_ON_CLOSE indica que o programa deve encerrar
                                                         // totalmente quando a janela for fechada.
         setSize(400, 350); // Tamanho
         setLocationRelativeTo(null); // centraliza
-        setResizable(false); // Tela não pode ser aumentada
+        setResizable(true); // Tela não pode ser aumentada
 
         cardLayout = new CardLayout(); // Você cria um array de telas, mas só pode mostrar uma de cada vez
         mainPanel = new JPanel(cardLayout); // mainPanel é um array de telas
@@ -55,9 +63,9 @@ public class MainFrame extends JFrame {
         panel.setLayout(null); // layout absoluto, mais controle manual (pode usar outros)
         panel.setBackground(Color.decode("#FBF2B7"));
 
-        
         ImageIcon icon = new ImageIcon(
-                getClass().getResource("/br\\com\\Banco\\imgs\\c9486f2a-c84b-4128-9967-164aa7749ccb-removebg-preview.png"));
+                getClass().getResource(
+                        "/br\\com\\Banco\\imgs\\c9486f2a-c84b-4128-9967-164aa7749ccb-removebg-preview.png"));
         Image img = icon.getImage();
         Image resized = img.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(resized);
@@ -97,41 +105,65 @@ public class MainFrame extends JFrame {
 
     private JPanel createCadastroPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(null);
+        panel.setMinimumSize(new Dimension(500, 400));
+
+        panel.setBackground(Color.decode("#FBF2B7"));
+        panel.setLayout(new GridBagLayout()); // responsividade
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // espaçamento entre os componentes
+        gbc.fill = GridBagConstraints.HORIZONTAL; // componentes se expandem horizontalmente
+
+        ImageIcon icon = new ImageIcon(getClass().getResource("/br/com/Banco/imgs/logo.png"));
+        setIconImage(icon.getImage());
 
         JLabel labelNovoCpf = new JLabel("CPF:");
-        labelNovoCpf.setBounds(50, 30, 80, 25);
-        panel.add(labelNovoCpf);
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(labelNovoCpf, gbc);
+
+        JLabel cadastro = new JLabel("Cadastro");
+        cadastro.setFont(new Font("Arial", Font.BOLD, 30));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(cadastro, gbc);
 
         novoCpfField = new JTextField();
-        novoCpfField.setBounds(130, 30, 180, 25);
-        panel.add(novoCpfField);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(novoCpfField, gbc);
 
         JLabel labelNovoNome = new JLabel("Nome:");
-        labelNovoNome.setBounds(50, 70, 80, 25);
-        panel.add(labelNovoNome);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panel.add(labelNovoNome, gbc);
 
         novoNomeField = new JTextField();
-        novoNomeField.setBounds(130, 70, 180, 25);
-        panel.add(novoNomeField);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel.add(novoNomeField, gbc);
 
         JLabel labelNovaSenha = new JLabel("Senha:");
-        labelNovaSenha.setBounds(50, 110, 80, 25);
-        panel.add(labelNovaSenha);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        panel.add(labelNovaSenha, gbc);
 
         novaSenhaField = new JPasswordField();
-        novaSenhaField.setBounds(130, 110, 180, 25);
-        panel.add(novaSenhaField);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        panel.add(novaSenhaField, gbc);
 
         JButton btnSalvar = new JButton("Salvar");
-        btnSalvar.setBounds(50, 160, 120, 30);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
         btnSalvar.addActionListener(e -> salvarCadastro());
-        panel.add(btnSalvar);
+        panel.add(btnSalvar, gbc);
 
         JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.setBounds(190, 160, 120, 30);
+        gbc.gridx = 1;
+        gbc.gridy = 4;
         btnVoltar.addActionListener(e -> cardLayout.show(mainPanel, "login"));
-        panel.add(btnVoltar);
+        panel.add(btnVoltar, gbc);
 
         return panel;
     }
@@ -141,11 +173,15 @@ public class MainFrame extends JFrame {
         String senha = new String(senhaField.getPassword());
 
         if (Inicializador.verificacaoDeLogin(cpf, senha, listaDeContas)) {
+            audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\login.wav");
+
             this.dispose(); // fecha login
             ContaFrame contaFrame = new ContaFrame(listaDeContas, cpf); // passa dados da conta logada
             contaFrame.setVisible(true);
             return;
         } else {
+            audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\algoDeuErrado.wav");
+
             JOptionPane.showMessageDialog(this, "Preencha CPF e senha!", "Erro", JOptionPane.ERROR_MESSAGE);
 
         }
@@ -158,19 +194,33 @@ public class MainFrame extends JFrame {
         String nome = novoNomeField.getText();
 
         if (cpf.isEmpty() || senha.isEmpty()) {
+            audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\algoDeuErrado.wav");
             JOptionPane.showMessageDialog(this, "Preencha CPF e senha!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        listaDeContas.add(new ContaCorrente(cpf, nome, 0, senha));
-        SalvarDados novaConta = new SalvarDados();
-        novaConta.salvar(listaDeContas);
+        validacaoCpf vali = new validacaoCpf();
+        if (procurar.search(listaDeContas, cpf) != -1){
+            JOptionPane.showMessageDialog(this, " CPF já cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+            if (vali.validacaoCpf(cpf)) {
 
-        JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso para CPF: " + cpf);
+                listaDeContas.add(new ContaCorrente(cpf, nome, 0, senha));
+                SalvarDados novaConta = new SalvarDados();
+                novaConta.salvar(listaDeContas);
+
+                JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso para CPF: " + cpf);
+                novoCpfField.setText("");
+                novaSenhaField.setText("");
+                cardLayout.show(mainPanel, "login");
+            } else {
+                JOptionPane.showMessageDialog(this, "CPF inválido", "Erro", JOptionPane.ERROR_MESSAGE);
+
+            }
+        
 
         // Limpa campos e volta para login
-        novoCpfField.setText("");
-        novaSenhaField.setText("");
-        cardLayout.show(mainPanel, "login");
+
     }
 
     public static void main(String[] args) throws Exception {

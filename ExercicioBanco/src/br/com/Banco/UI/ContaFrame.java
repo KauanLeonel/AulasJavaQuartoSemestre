@@ -2,6 +2,7 @@ package br.com.Banco.UI;
 
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import javax.swing.JTextField;
 import java.awt.*;
 
 import br.com.Banco.Exception.SaldoInsuficienteException;
+import br.com.Banco.app.ReproduzirAudios;
 import br.com.Banco.app.SalvarDados;
 import br.com.Banco.app.SearchCpf;
 import br.com.Banco.model.ContaCorrente;
@@ -25,6 +27,7 @@ public class ContaFrame extends JFrame {
     private CardLayout cardLayout;
     private JLabel labelSaldo;
 
+    ReproduzirAudios audio = new ReproduzirAudios();
     // componentes da tela
     private JTextField numeroDaMovimentacao;
 
@@ -32,6 +35,9 @@ public class ContaFrame extends JFrame {
         super("Conta");
         this.listaDeContas = listaDeContas;
         this.cpf = cpf;
+
+        ImageIcon icon = new ImageIcon(getClass().getResource("/br/com/Banco/imgs/logo.png"));
+        setIconImage(icon.getImage());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 350);
@@ -44,8 +50,9 @@ public class ContaFrame extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
+        panel.setBackground(Color.decode("#FBF2B7"));
 
-        JButton btnUser = new JButton("...");
+        JButton btnUser = new JButton("👤");
         btnUser.setBounds(10, 10, 50, 20);
         btnUser.addActionListener(e -> edit());
 
@@ -57,7 +64,7 @@ public class ContaFrame extends JFrame {
         panel.add(btnSair);
 
         JLabel labelCpf = new JLabel("CPF:" + listaDeContas.get(user).getCpf());
-        labelCpf.setBounds(50, 30, 200, 25);
+        labelCpf.setBounds(50, 40, 200, 25);
         panel.add(labelCpf);
 
         JLabel labelNome = new JLabel("Nome:" + listaDeContas.get(user).getTitular());
@@ -92,21 +99,34 @@ public class ContaFrame extends JFrame {
     }
 
     private void depositar(int user) {
-        Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
-        listaDeContas.get(user).depositar(numero);
-        salvar();
-        labelSaldo.setText("Saldo: " + listaDeContas.get(user).getSaldo());
+        if (!numeroDaMovimentacao.getText().isEmpty()) {
+            Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
+
+            listaDeContas.get(user).depositar(numero);
+            salvar();
+            labelSaldo.setText("Saldo: " + listaDeContas.get(user).getSaldo());
+        }
     }
 
     private void sacar(int user) {
-        try {
-            Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
-            listaDeContas.get(user).sacar(numero);
-        } catch (Exception e) {
-        }
-        salvar();
-        labelSaldo.setText("Saldo: " + listaDeContas.get(user).getSaldo());
 
+        if (!numeroDaMovimentacao.getText().isEmpty()) {
+            Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
+
+            try {
+                if (numero > 1000)
+                    audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\eu-quero-eu-posso-cariani_095031.wav");
+
+                listaDeContas.get(user).sacar(numero);
+            } catch (Exception e) {
+                audio.reproduzirAudios("ssrc\\br\\com\\Banco\\Audios\\n" + //
+                        "ao-consegue-ne_233542.wav");
+
+            }
+
+            salvar();
+            labelSaldo.setText("Saldo: " + listaDeContas.get(user).getSaldo());
+        }
     }
 
     private void salvar() {
