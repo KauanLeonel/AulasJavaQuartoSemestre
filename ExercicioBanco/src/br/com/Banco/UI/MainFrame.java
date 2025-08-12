@@ -199,7 +199,7 @@ public class MainFrame extends JFrame {
             return;
         }
         validacaoCpf vali = new validacaoCpf();
-        if (procurar.search(listaDeContas, cpf) != -1){
+        if (procurar.search(listaDeContas, cpf) == -1){
             JOptionPane.showMessageDialog(this, " CPF já cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
