@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import br.com.Banco.app.SalvarDados;
@@ -90,10 +91,14 @@ public class EditeProfile extends JFrame {
         gbc.gridy = 4;
         panel.add(labelNewPassawordConfirm, gbc);
 
-        newPasswordConfirm = new JTextField();
+        JPasswordField newPasswordConfirm = new JPasswordField();
+        //Fazer uma checkbox para alterar o boolean
+        // newPasswordConfirm.setEchoChar('*'); //Para esconder a senha com *
+        // newPasswordConfirm.setEchoChar('\u0000'); //Para mostrar a senha
         gbc.gridx = 2;
         gbc.gridy = 4;
         panel.add(newPasswordConfirm, gbc);
+
 
         JButton btnSair = new JButton("Cancelar");
         gbc.gridx = 1;

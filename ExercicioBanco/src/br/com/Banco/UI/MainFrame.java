@@ -3,6 +3,7 @@ package br.com.Banco.UI;
 import javax.swing.*;
 import java.util.List;
 
+import br.com.Banco.app.Filtro;
 import br.com.Banco.app.Inicializador;
 import br.com.Banco.app.ReproduzirAudios;
 import br.com.Banco.app.SalvarDados;
@@ -169,6 +170,8 @@ public class MainFrame extends JFrame {
     }
 
     private void login() {
+        Filtro filter = new Filtro();
+        filter.SalarioMaiorQueDezMil(listaDeContas);
         String cpf = cpfField.getText();
         String senha = new String(senhaField.getPassword());
 

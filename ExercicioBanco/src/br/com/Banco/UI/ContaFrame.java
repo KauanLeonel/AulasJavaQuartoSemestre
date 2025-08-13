@@ -103,6 +103,10 @@ public class ContaFrame extends JFrame {
             Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
 
             listaDeContas.get(user).depositar(numero);
+            audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\Caixa-Registradora-Dinheiro.wav");
+
+            JOptionPane.showMessageDialog(this, "Deposito de R$ " + numero + " feito!");
+
             salvar();
             labelSaldo.setText("Saldo: " + listaDeContas.get(user).getSaldo());
         }
@@ -116,8 +120,12 @@ public class ContaFrame extends JFrame {
             try {
                 if (numero > 1000)
                     audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\eu-quero-eu-posso-cariani_095031.wav");
+                else
+                    audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\classic_hurt.wav");
 
                 listaDeContas.get(user).sacar(numero);
+                JOptionPane.showMessageDialog(this, "Saque de R$ " + numero + " feito!");
+
             } catch (Exception e) {
                 audio.reproduzirAudios("ssrc\\br\\com\\Banco\\Audios\\n" + //
                         "ao-consegue-ne_233542.wav");
