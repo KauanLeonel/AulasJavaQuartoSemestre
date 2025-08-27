@@ -16,8 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.app.SalvarDados;
 import br.com.Banco.app.SearchCpf;
+import br.com.Banco.model.Conta;
 import br.com.Banco.model.ContaCorrente;
 
 public class EditeProfile extends JFrame {
@@ -26,10 +28,11 @@ public class EditeProfile extends JFrame {
     private JTextField password;
     private JTextField newPassword;
     private JTextField newPasswordConfirm;
+    static ContaCorrenteDao dao = new ContaCorrenteDao();
 
-    public EditeProfile(List<ContaCorrente> listaDeContas, String cpf) {
+    //#region  UI
+    public EditeProfile( String cpf) {
         super("Editar perfil");
-        this.listaDeContas = listaDeContas;
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/br/com/Banco/imgs/logo.png"));
         setIconImage(icon.getImage());
@@ -46,9 +49,9 @@ public class EditeProfile extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         SearchCpf busca = new SearchCpf();
-        int user = busca.search(listaDeContas, cpf);
+        ContaCorrente user = dao.buscaEspecifica(cpf);
 
-        JLabel labelCpf = new JLabel("CPF:" + listaDeContas.get(user).getCpf());
+        JLabel labelCpf = new JLabel("CPF:" + user.getCpf());
         gbc.gridwidth = 2;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -61,7 +64,7 @@ public class EditeProfile extends JFrame {
         gbc.gridy = 1;
         panel.add(labelNome, gbc);
 
-        nameLabel = new JTextField(listaDeContas.get(user).getTitular());
+        nameLabel = new JTextField(user.getTitular());
         gbc.gridx = 2;
         gbc.gridy = 1;
         panel.add(nameLabel, gbc);
@@ -117,9 +120,13 @@ public class EditeProfile extends JFrame {
 
     }
 
+    //#endregion
+
+    //#region FUNÇÕES 
+    
     private void sair(String cpf) {
         this.dispose(); // fecha login
-        ContaFrame ContaFrame = new ContaFrame(listaDeContas, cpf);
+        ContaFrame ContaFrame = new ContaFrame(cpf);
         ContaFrame.setVisible(true);
         return;
     }
@@ -128,14 +135,13 @@ public class EditeProfile extends JFrame {
         String senha = password.getText();
         String novaSenha = newPassword.getText();
         String novaSenhaConfirmacao = newPasswordConfirm.getText();
-        SearchCpf busca = new SearchCpf();
-        int user = busca.search(listaDeContas, cpf);
+        ContaCorrente user = dao.buscaEspecifica(cpf);
         if (senha.isEmpty() && novaSenha.isEmpty() && novaSenhaConfirmacao.isEmpty()) {
-            newPassword.setText(listaDeContas.get(user).getSenha());
+            newPassword.setText(user.getSenha());
             salvar(cpf);
         } else {
 
-            if (senha.equals(listaDeContas.get(user).getSenha()) && novaSenha.equals(novaSenhaConfirmacao)
+            if (senha.equals(user.getSenha()) && novaSenha.equals(novaSenhaConfirmacao)
                     && !novaSenha.isEmpty() && !novaSenhaConfirmacao.isEmpty()) {
                 salvar(cpf);
             } else {
@@ -148,15 +154,14 @@ public class EditeProfile extends JFrame {
     private void salvar(String cpf) {
         String nome = nameLabel.getText();
         String senha = newPassword.getText();
-        SearchCpf busca = new SearchCpf();
-        int user = busca.search(listaDeContas, cpf);
-        listaDeContas.get(user).setSenha(senha);
-        listaDeContas.get(user).setTitular(nome);
-        SalvarDados save = new SalvarDados();
-        save.salvar(listaDeContas);
+        ContaCorrente user = dao.buscaEspecifica(cpf);
+        user.setSenha(senha);
+        user.setTitular(nome);
+        dao.atualizar(user);
         this.dispose(); // fecha login
-        ContaFrame ContaFrame = new ContaFrame(listaDeContas, cpf);
+        ContaFrame ContaFrame = new ContaFrame(cpf);
         ContaFrame.setVisible(true);
         return;
     }
+    //#endregion
 }

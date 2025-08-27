@@ -3,6 +3,7 @@ package br.com.Banco.UI;
 import javax.swing.*;
 import java.util.List;
 
+import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.app.Inicializador;
 import br.com.Banco.app.ReproduzirAudios;
 import br.com.Banco.app.SalvarDados;
@@ -31,7 +32,9 @@ public class MainFrame extends JFrame {
     private JPasswordField novaSenhaField;
     ReproduzirAudios audio = new ReproduzirAudios();
     SearchCpf procurar = new SearchCpf();
+    static ContaCorrenteDao dao = new ContaCorrenteDao();
 
+    //#region UI
     public MainFrame(List<ContaCorrente> listaDeContas) {
         super("Banco - Sistema de Login");
         this.listaDeContas = listaDeContas;
@@ -167,18 +170,21 @@ public class MainFrame extends JFrame {
 
         return panel;
     }
+ 
+    //#endregion
 
+    //FUNÇÕES
     private void login() {
         //Filtro filter = new Filtro();
         //filter.SalarioMaiorQueDezMil(listaDeContas);
         String cpf = cpfField.getText();
         String senha = new String(senhaField.getPassword());
 
-        if (Inicializador.verificacaoDeLogin(cpf, senha, listaDeContas)) {
+        if (Inicializador.verificacaoDeLogin(cpf, senha)) {
             audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\login.wav");
 
             this.dispose(); // fecha login
-            ContaFrame contaFrame = new ContaFrame(listaDeContas, cpf); // passa dados da conta logada
+            ContaFrame contaFrame = new ContaFrame(cpf); // passa dados da conta logada
             contaFrame.setVisible(true);
             return;
         } else {
@@ -201,15 +207,13 @@ public class MainFrame extends JFrame {
             return;
         }
         validacaoCpf vali = new validacaoCpf();
-        if (procurar.search(listaDeContas, cpf) == -1){
+        if (procurar.search(cpf) != 1){
             JOptionPane.showMessageDialog(this, " CPF já cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
             if (vali.validacaoCpf(cpf)) {
-
-                listaDeContas.add(new ContaCorrente(cpf, nome, 0, senha));
-                SalvarDados novaConta = new SalvarDados();
-                novaConta.salvar(listaDeContas);
+                ContaCorrente conta = new ContaCorrente(cpf, nome, 0, senha);
+                dao.inserir(conta);
 
                 JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso para CPF: " + cpf);
                 novoCpfField.setText("");
@@ -226,8 +230,13 @@ public class MainFrame extends JFrame {
     }
 
     public static void main(String[] args) throws Exception {
-        Inicializador inicializador = new Inicializador();
-        List<ContaCorrente> contas = inicializador.carregarContas();
+        //Com JDBC
+
+        List<ContaCorrente> contas = dao.listar();
+
+        //Com txt
+        // Inicializador inicializador = new Inicializador();
+        // List<ContaCorrente> contas = inicializador.carregarContas();
 
         MainFrame frame = new MainFrame(contas);
         frame.setVisible(true);

@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 
 import java.awt.*;
 
+import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.Exception.SaldoInsuficienteException;
 import br.com.Banco.app.ReproduzirAudios;
 import br.com.Banco.app.SalvarDados;
@@ -30,8 +31,11 @@ public class ContaFrame extends JFrame {
     ReproduzirAudios audio = new ReproduzirAudios();
     // componentes da tela
     private JTextField numeroDaMovimentacao;
+        static ContaCorrenteDao dao = new ContaCorrenteDao();
 
-    public ContaFrame(List<ContaCorrente> listaDeContas, String cpf) {
+
+    //#region UI
+    public ContaFrame(String cpf) {
         super("Conta");
         this.listaDeContas = listaDeContas;
         this.cpf = cpf;
@@ -45,8 +49,7 @@ public class ContaFrame extends JFrame {
         setResizable(false);
 
         // Buscar User
-        SearchCpf busca = new SearchCpf();
-        int user = busca.search(listaDeContas, cpf);
+        ContaCorrente user = dao.buscaEspecifica(cpf);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -63,15 +66,15 @@ public class ContaFrame extends JFrame {
         btnSair.addActionListener(e -> sair());
         panel.add(btnSair);
 
-        JLabel labelCpf = new JLabel("CPF:" + listaDeContas.get(user).getCpf());
+        JLabel labelCpf = new JLabel("CPF:" + user.getCpf());
         labelCpf.setBounds(50, 40, 200, 25);
         panel.add(labelCpf);
 
-        JLabel labelNome = new JLabel("Nome:" + listaDeContas.get(user).getTitular());
+        JLabel labelNome = new JLabel("Nome:" + user.getTitular());
         labelNome.setBounds(50, 80, 200, 25);
         panel.add(labelNome);
 
-        labelSaldo = new JLabel("Saldo:" + listaDeContas.get(user).getSaldo());
+        labelSaldo = new JLabel("Saldo:" + user.getSaldo());
         labelSaldo.setBounds(50, 120, 200, 25);
         panel.add(labelSaldo);
 
@@ -97,22 +100,25 @@ public class ContaFrame extends JFrame {
         add(panel);
 
     }
+    //#endregion
 
-    private void depositar(int user) {
+    //#region Funções
+
+    private void depositar(ContaCorrente user) {
         if (!numeroDaMovimentacao.getText().isEmpty()) {
             Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
 
-            listaDeContas.get(user).depositar(numero);
+            user.depositar(numero);
             audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\Caixa-Registradora-Dinheiro.wav");
 
             JOptionPane.showMessageDialog(this, "Deposito de R$ " + numero + " feito!");
 
-            salvar();
-            labelSaldo.setText("Saldo: " + listaDeContas.get(user).getSaldo());
+            salvar(user);
+            labelSaldo.setText("Saldo: " +user.getSaldo());
         }
     }
 
-    private void sacar(int user) {
+    private void sacar(ContaCorrente user) {
 
         if (!numeroDaMovimentacao.getText().isEmpty()) {
             Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
@@ -123,7 +129,7 @@ public class ContaFrame extends JFrame {
                 else
                     audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\classic_hurt.wav");
 
-                listaDeContas.get(user).sacar(numero);
+                user.sacar(numero);
                 JOptionPane.showMessageDialog(this, "Saque de R$ " + numero + " feito!");
 
             } catch (Exception e) {
@@ -132,14 +138,13 @@ public class ContaFrame extends JFrame {
 
             }
 
-            salvar();
-            labelSaldo.setText("Saldo: " + listaDeContas.get(user).getSaldo());
+            salvar(user);
+            labelSaldo.setText("Saldo: " + user.getSaldo());
         }
     }
 
-    private void salvar() {
-        SalvarDados save = new SalvarDados();
-        save.salvar(listaDeContas);
+    private void salvar(ContaCorrente user) {
+        dao.atualizar(user);
     }
 
     private void sair() {
@@ -151,9 +156,10 @@ public class ContaFrame extends JFrame {
 
     private void edit() {
         this.dispose(); // fecha login
-        EditeProfile editeProfile = new EditeProfile(listaDeContas, cpf);
+        EditeProfile editeProfile = new EditeProfile(cpf);
         editeProfile.setVisible(true);
         return;
 
     }
+    //#endregion
 }
