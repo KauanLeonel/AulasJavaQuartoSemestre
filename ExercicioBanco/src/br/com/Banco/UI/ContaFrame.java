@@ -31,7 +31,7 @@ public class ContaFrame extends JFrame {
     ReproduzirAudios audio = new ReproduzirAudios();
     // componentes da tela
     private JTextField numeroDaMovimentacao;
-        static ContaCorrenteDao dao = new ContaCorrenteDao();
+    static ContaCorrenteDao dao = new ContaCorrenteDao();
 
 
     //#region UI
@@ -94,8 +94,13 @@ public class ContaFrame extends JFrame {
         JButton btnSacar = new JButton("Sacar");
         btnSacar.setBounds(190, 210, 120, 30);
         btnSacar.addActionListener(e -> sacar(user));
-
         panel.add(btnSacar);
+        
+
+        JButton btnTransferir = new JButton("Transferir");
+        btnTransferir.setBounds(50, 260, 270, 30);
+        btnTransferir.addActionListener(e -> transferir());
+        panel.add(btnTransferir);
 
         add(panel);
 
@@ -145,6 +150,13 @@ public class ContaFrame extends JFrame {
 
     private void salvar(ContaCorrente user) {
         dao.atualizar(user);
+    }
+
+    private void transferir() {
+        this.dispose(); // fecha login
+        TransferirFrame transferirFrame = new TransferirFrame(cpf);
+        transferirFrame.setVisible(true);
+        return;
     }
 
     private void sair() {
