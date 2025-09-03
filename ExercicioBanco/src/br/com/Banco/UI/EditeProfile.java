@@ -116,6 +116,13 @@ public class EditeProfile extends JFrame {
 
         panel.add(btnSalvar, gbc);
 
+
+        JButton btnExcluir = new JButton("Excluir");
+        gbc.gridwidth = 2;
+        gbc.gridx = 1;
+        gbc.gridy = 6;
+        btnSair.addActionListener(e -> sair(cpf));
+        panel.add(btnSair, gbc);
         add(panel);
 
     }
@@ -129,6 +136,11 @@ public class EditeProfile extends JFrame {
         ContaFrame ContaFrame = new ContaFrame(cpf);
         ContaFrame.setVisible(true);
         return;
+    }
+
+    public void excluir(String cpf){
+        dao.remover(cpf);
+        sair(cpf); //Consertar
     }
 
     private void verificacao(JTextField password, JTextField newPassword, JTextField newPasswordConfirm, String cpf) {
