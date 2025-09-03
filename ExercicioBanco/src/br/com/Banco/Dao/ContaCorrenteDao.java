@@ -10,7 +10,7 @@ public class ContaCorrenteDao {
 
     // CREATE
     public void inserir(ContaCorrente contaCorrente) {
-        String sql = " INSERT INTO contas(cpf, nome, saldo, senha) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO contacorrente(cpf, nome, saldo, senha) VALUES (?, ?, ?, ?)";
 
         try {
             Connection conn = Conexao.getConnection();
@@ -22,6 +22,7 @@ public class ContaCorrenteDao {
                     stmt.setString(2, contaCorrente.getTitular());
                     stmt.setDouble(3, contaCorrente.getSaldo());
                     stmt.setString(4, contaCorrente.getSenha());
+                    stmt.executeUpdate();
                 } catch (Throwable var9) {
                     if (stmt != null) {
                         try {
@@ -60,15 +61,15 @@ public class ContaCorrenteDao {
 
     // UPTADE
     public void atualizar(ContaCorrente contaCorrente) {
-        String sql = "UPTADE contas SET nome=?, saldo =?, senha=? WHERE cpf =?";
-        try (Connection conn = Conexao.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, contaCorrente.getTitular());
-            stmt.setDouble(2, contaCorrente.getSaldo());
-            stmt.setString(3, contaCorrente.getSenha());
-            stmt.setString(4, contaCorrente.getCpf());
-            stmt.executeUpdate();
-
+        String sql = "UPDATE contacorrente SET nome=?, saldo =?, senha=? WHERE cpf =?";
+        try (
+            Connection conn = Conexao.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, contaCorrente.getTitular());
+                stmt.setDouble(2, contaCorrente.getSaldo());
+                stmt.setString(3, contaCorrente.getSenha());
+                stmt.setString(4, contaCorrente.getCpf());
+                stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,7 +78,7 @@ public class ContaCorrenteDao {
 
     // DELETAR
     public void remover(String cpf) {
-        String sql = "DELETE from contas WHERE cpf = ?";
+        String sql = "DELETE from contacorrente WHERE cpf = ?";
         try (Connection conn = Conexao.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cpf);
@@ -91,7 +92,7 @@ public class ContaCorrenteDao {
 
     public List<ContaCorrente> listar() {
         List<ContaCorrente> contasCorrentes = new ArrayList<>();
-        String sql = "SELECT * from contas";
+        String sql = "SELECT * from contacorrente";
         try (
                 Connection conn = Conexao.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql);
@@ -114,21 +115,28 @@ public class ContaCorrenteDao {
 
     // Buscar conta específica
     public ContaCorrente buscaEspecifica(String cpf) {
-        String sql = "SELECT * from contas Where cpf = ?";
-        ContaCorrente conta = new ContaCorrente("ERROR", cpf, 0, sql); // Para conseguir retornar
+        String sql = "SELECT * from contacorrente Where cpf = ?";
+        ContaCorrente conta = new ContaCorrente("ERROR", "Teste", 0, "HAHA"); // Para conseguir retornar
         try (
-                Connection conn = Conexao.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery(sql)) {
-            conta = new ContaCorrente(
+            Connection conn = Conexao.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+
+            stmt.setString(1, cpf);
+            ResultSet rs = stmt.executeQuery();
+            
+            if(rs.next()){
+                conta = new ContaCorrente(
                     rs.getString("cpf"),
                     rs.getString("nome"),
                     rs.getDouble("saldo"),
-                    rs.getString("senha"));
+                    rs.getString("senha")
+                );
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return conta;
 
     }
