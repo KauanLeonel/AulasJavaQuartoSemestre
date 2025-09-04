@@ -6,7 +6,6 @@ import java.util.List;
 import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.app.Inicializador;
 import br.com.Banco.app.ReproduzirAudios;
-import br.com.Banco.app.SalvarDados;
 import br.com.Banco.app.SearchCpf;
 import br.com.Banco.app.validacaoCpf;
 import br.com.Banco.model.Conta;
@@ -34,8 +33,8 @@ public class MainFrame extends JFrame {
     SearchCpf procurar = new SearchCpf();
     static ContaCorrenteDao dao = new ContaCorrenteDao();
 
-    //#region UI
-    public MainFrame(List<ContaCorrente> listaDeContas) {
+    // #region UI
+    public MainFrame() {
         super("Banco - Sistema de Login");
         this.listaDeContas = listaDeContas;
 
@@ -107,6 +106,7 @@ public class MainFrame extends JFrame {
     }
 
     private JPanel createCadastroPanel() {
+
         JPanel panel = new JPanel();
         panel.setMinimumSize(new Dimension(500, 400));
 
@@ -119,7 +119,7 @@ public class MainFrame extends JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource("/br/com/Banco/imgs/logo.png"));
         setIconImage(icon.getImage());
 
-        JLabel labelNovoCpf = new JLabel("CPF:");
+        JLabel labelNovoCpf = new JLabel("Digite seu CPF (Apenas números):");
         gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -132,26 +132,32 @@ public class MainFrame extends JFrame {
         panel.add(cadastro, gbc);
 
         novoCpfField = new JTextField();
+        novoCpfField.setPreferredSize(new Dimension(80, 30));
+
         gbc.gridx = 1;
         gbc.gridy = 1;
         panel.add(novoCpfField, gbc);
 
-        JLabel labelNovoNome = new JLabel("Nome:");
+        JLabel labelNovoNome = new JLabel("Digite seu nome completo:");
         gbc.gridx = 0;
         gbc.gridy = 2;
         panel.add(labelNovoNome, gbc);
 
         novoNomeField = new JTextField();
+        novoNomeField.setPreferredSize(new Dimension(80, 30));
+
         gbc.gridx = 1;
         gbc.gridy = 2;
         panel.add(novoNomeField, gbc);
 
-        JLabel labelNovaSenha = new JLabel("Senha:");
+        JLabel labelNovaSenha = new JLabel("Digite uma senha forte:");
         gbc.gridx = 0;
         gbc.gridy = 3;
         panel.add(labelNovaSenha, gbc);
 
         novaSenhaField = new JPasswordField();
+        novaSenhaField.setPreferredSize(new Dimension(80, 30));
+
         gbc.gridx = 1;
         gbc.gridy = 3;
         panel.add(novaSenhaField, gbc);
@@ -170,75 +176,80 @@ public class MainFrame extends JFrame {
 
         return panel;
     }
- 
-    //#endregion
 
-    //FUNÇÕES
+    // #endregion
+
+    // FUNÇÕES
     private void login() {
-        //Filtro filter = new Filtro();
-        //filter.SalarioMaiorQueDezMil(listaDeContas);
         String cpf = cpfField.getText();
         String senha = new String(senhaField.getPassword());
+        SearchCpf search = new SearchCpf();
 
+        // Erro de campos vazios
+        if (cpf.isEmpty() || senha.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Erro de cpf não encontrado
+        if (search.search(cpf) == 1) {
+            JOptionPane.showMessageDialog(this, "CPF não cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Se a senha e o cpf colidirem, entra na conta, se não, a senha está errada
         if (Inicializador.verificacaoDeLogin(cpf, senha)) {
             audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\login.wav");
-
+            cpfField.setText("");
+            senhaField.setText("");
             this.dispose(); // fecha login
             ContaFrame contaFrame = new ContaFrame(cpf); // passa dados da conta logada
             contaFrame.setVisible(true);
             return;
         } else {
             audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\algoDeuErrado.wav");
-
-            JOptionPane.showMessageDialog(this, "Preencha CPF e senha!", "Erro", JOptionPane.ERROR_MESSAGE);
-
+            JOptionPane.showMessageDialog(this, "CPF ou senha incorreto!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     private void salvarCadastro() {
         String cpf = novoCpfField.getText();
         String senha = new String(novaSenhaField.getPassword());
         String nome = novoNomeField.getText();
-
+        validacaoCpf vali = new validacaoCpf();
+        // Erro de campos vazios
         if (cpf.isEmpty() || senha.isEmpty()) {
             audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\algoDeuErrado.wav");
             JOptionPane.showMessageDialog(this, "Preencha CPF e senha!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        validacaoCpf vali = new validacaoCpf();
-        if (procurar.search(cpf) != 1){
+
+        // Erro de cpf já cadastrado
+        if (procurar.search(cpf) != 1) {
             JOptionPane.showMessageDialog(this, " CPF já cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-            if (vali.validacaoCpf(cpf)) {
-                ContaCorrente conta = new ContaCorrente(cpf, nome, 0, senha);
-                dao.inserir(conta);
 
-                JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso para CPF: " + cpf);
-                novoCpfField.setText("");
-                novaSenhaField.setText("");
-                cardLayout.show(mainPanel, "login");
-            } else {
-                JOptionPane.showMessageDialog(this, "CPF inválido", "Erro", JOptionPane.ERROR_MESSAGE);
+        //Se o cpf é válido ele cadastra
+        if (vali.validacao(cpf)) {
+            ContaCorrente conta = new ContaCorrente(cpf, nome, 0, senha);
+            dao.inserir(conta);
 
-            }
-        
+            JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso para CPF: " + cpf);
+            novoCpfField.setText("");
+            novaSenhaField.setText("");
+            cardLayout.show(mainPanel, "login");
+        } else {
+            JOptionPane.showMessageDialog(this, "CPF inválido", "Erro", JOptionPane.ERROR_MESSAGE);
+
+        }
 
         // Limpa campos e volta para login
 
     }
 
     public static void main(String[] args) throws Exception {
-        //Com JDBC
-
-        List<ContaCorrente> contas = dao.listar();
-
-        //Com txt
-        // Inicializador inicializador = new Inicializador();
-        // List<ContaCorrente> contas = inicializador.carregarContas();
-
-        MainFrame frame = new MainFrame(contas);
+        MainFrame frame = new MainFrame();
         frame.setVisible(true);
     }
 }

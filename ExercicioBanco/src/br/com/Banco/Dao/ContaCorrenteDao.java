@@ -63,13 +63,13 @@ public class ContaCorrenteDao {
     public void atualizar(ContaCorrente contaCorrente) {
         String sql = "UPDATE contacorrente SET nome=?, saldo =?, senha=? WHERE cpf =?";
         try (
-            Connection conn = Conexao.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, contaCorrente.getTitular());
-                stmt.setDouble(2, contaCorrente.getSaldo());
-                stmt.setString(3, contaCorrente.getSenha());
-                stmt.setString(4, contaCorrente.getCpf());
-                stmt.executeUpdate();
+                Connection conn = Conexao.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, contaCorrente.getTitular());
+            stmt.setDouble(2, contaCorrente.getSaldo());
+            stmt.setString(3, contaCorrente.getSenha());
+            stmt.setString(4, contaCorrente.getCpf());
+            stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,20 +118,18 @@ public class ContaCorrenteDao {
         String sql = "SELECT * from contacorrente Where cpf = ?";
         ContaCorrente conta = new ContaCorrente("ERROR", "Teste", 0, "HAHA"); // Para conseguir retornar
         try (
-            Connection conn = Conexao.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+                Connection conn = Conexao.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, cpf);
             ResultSet rs = stmt.executeQuery();
-            
-            if(rs.next()){
+
+            if (rs.next()) {
                 conta = new ContaCorrente(
-                    rs.getString("cpf"),
-                    rs.getString("nome"),
-                    rs.getDouble("saldo"),
-                    rs.getString("senha")
-                );
+                        rs.getString("cpf"),
+                        rs.getString("nome"),
+                        rs.getDouble("saldo"),
+                        rs.getString("senha"));
             }
 
         } catch (Exception e) {

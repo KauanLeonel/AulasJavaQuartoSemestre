@@ -13,19 +13,15 @@ import javax.swing.JTextField;
 import java.awt.*;
 
 import br.com.Banco.Dao.ContaCorrenteDao;
-import br.com.Banco.Exception.SaldoInsuficienteException;
 import br.com.Banco.app.ReproduzirAudios;
-import br.com.Banco.app.SalvarDados;
-import br.com.Banco.app.SearchCpf;
+
 import br.com.Banco.model.ContaCorrente;
 
 public class ContaFrame extends JFrame {
 
     private List<ContaCorrente> listaDeContas;
     private String cpf;
-    private JPanel mainPanel;
 
-    private CardLayout cardLayout;
     private JLabel labelSaldo;
 
     ReproduzirAudios audio = new ReproduzirAudios();
@@ -33,11 +29,9 @@ public class ContaFrame extends JFrame {
     private JTextField numeroDaMovimentacao;
     static ContaCorrenteDao dao = new ContaCorrenteDao();
 
-
-    //#region UI
+    // #region UI
     public ContaFrame(String cpf) {
         super("Conta");
-        this.listaDeContas = listaDeContas;
         this.cpf = cpf;
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/br/com/Banco/imgs/logo.png"));
@@ -95,7 +89,6 @@ public class ContaFrame extends JFrame {
         btnSacar.setBounds(190, 210, 120, 30);
         btnSacar.addActionListener(e -> sacar(user));
         panel.add(btnSacar);
-        
 
         JButton btnTransferir = new JButton("Transferir");
         btnTransferir.setBounds(50, 260, 270, 30);
@@ -105,51 +98,74 @@ public class ContaFrame extends JFrame {
         add(panel);
 
     }
-    //#endregion
+    // #endregion
 
-    //#region Funções
+    // #region Funções
 
     private void depositar(ContaCorrente user) {
-        if (!numeroDaMovimentacao.getText().isEmpty()) {
+        // se o campo não estiver vazio
+        try {
             Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
 
-            user.depositar(numero);
-            audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\Caixa-Registradora-Dinheiro.wav");
+            if (!numeroDaMovimentacao.getText().isEmpty() && numero > 0 && numero != null) {
+                user.depositar(numero);
+                audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\Caixa-Registradora-Dinheiro.wav");
 
-            JOptionPane.showMessageDialog(this, "Deposito de R$ " + numero + " feito!");
+                JOptionPane.showMessageDialog(this, "Deposito de R$ " + numero + " feito!");
 
-            salvar(user);
-            labelSaldo.setText("Saldo: " +user.getSaldo());
+                salvar(user);
+                labelSaldo.setText("Saldo: " + user.getSaldo());
+            } else {
+                JOptionPane.showMessageDialog(this, "NÃO TENTE BURLAR MEU SISTEMA NÃO, VACILÃO!", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "INSIRA UM VALOR!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
     private void sacar(ContaCorrente user) {
 
-        if (!numeroDaMovimentacao.getText().isEmpty()) {
+        try {
             Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
 
-            try {
-                if (numero > 1000)
-                    audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\eu-quero-eu-posso-cariani_095031.wav");
-                else
-                    audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\classic_hurt.wav");
+            if (!numeroDaMovimentacao.getText().isEmpty() && numero > 0) {
+                try {
+                    if (numero > 1000)
+                        audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\eu-quero-eu-posso-cariani_095031.wav");
+                    else
+                        audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\classic_hurt.wav");
 
-                user.sacar(numero);
-                JOptionPane.showMessageDialog(this, "Saque de R$ " + numero + " feito!");
+                    user.sacar(numero);
+                    JOptionPane.showMessageDialog(this, "Saque de R$ " + numero + " feito!");
 
-            } catch (Exception e) {
-                audio.reproduzirAudios("ssrc\\br\\com\\Banco\\Audios\\n" + //
-                        "ao-consegue-ne_233542.wav");
+                } catch (Exception e) {
+                    audio.reproduzirAudios("ssrc\\br\\com\\Banco\\Audios\\n" + //
+                            "ao-consegue-ne_233542.wav");
 
+                }
+
+                salvar(user);
+                labelSaldo.setText("Saldo: " + user.getSaldo()); //Atualiza o saldo
+            } else {
+                JOptionPane.showMessageDialog(this, "NÃO TENTE BURLAR MEU SISTEMA NÃO, VACILÃO!", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
             }
-
-            salvar(user);
-            labelSaldo.setText("Saldo: " + user.getSaldo());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "INSIRA UM VALOR!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
     private void salvar(ContaCorrente user) {
-        dao.atualizar(user);
+        try {
+            dao.atualizar(user);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao conectar com o banco de dados", "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     private void transferir() {
@@ -161,7 +177,7 @@ public class ContaFrame extends JFrame {
 
     private void sair() {
         this.dispose(); // fecha login
-        MainFrame mainFrame = new MainFrame(listaDeContas);
+        MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);
         return;
     }
@@ -173,5 +189,5 @@ public class ContaFrame extends JFrame {
         return;
 
     }
-    //#endregion
+    // #endregion
 }

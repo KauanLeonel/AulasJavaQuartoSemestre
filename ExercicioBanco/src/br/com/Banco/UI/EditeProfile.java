@@ -17,7 +17,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import br.com.Banco.Dao.ContaCorrenteDao;
-import br.com.Banco.app.SalvarDados;
 import br.com.Banco.app.SearchCpf;
 import br.com.Banco.model.Conta;
 import br.com.Banco.model.ContaCorrente;
@@ -107,9 +106,12 @@ public class EditeProfile extends JFrame {
         gbc.gridx = 1;
         gbc.gridy = 5;
         btnSair.addActionListener(e -> sair(cpf));
+        btnSair.setBackground(new Color(221,95,96));
+        btnSair.setFocusPainted(false);
         panel.add(btnSair, gbc);
 
         JButton btnSalvar = new JButton("Salvar");
+        btnSalvar.setBackground(new Color(110,206,118));
         gbc.gridx = 2;
         gbc.gridy = 5;
         btnSalvar.addActionListener(e -> verificacao(password, newPassword, newPasswordConfirm, cpf));
@@ -121,8 +123,9 @@ public class EditeProfile extends JFrame {
         gbc.gridwidth = 2;
         gbc.gridx = 1;
         gbc.gridy = 6;
-        btnSair.addActionListener(e -> sair(cpf));
-        panel.add(btnSair, gbc);
+        btnExcluir.addActionListener(e -> excluir(cpf));
+        btnExcluir.setBackground(new Color(221,95,96));
+        panel.add(btnExcluir, gbc);
         add(panel);
 
     }
@@ -132,15 +135,22 @@ public class EditeProfile extends JFrame {
     //#region FUNÇÕES 
     
     private void sair(String cpf) {
+        if(cpf.equals("0")){
+        this.dispose(); // fecha login
+        MainFrame mainFrame = new MainFrame();
+        mainFrame.setVisible(true);
+        } else{
         this.dispose(); // fecha login
         ContaFrame ContaFrame = new ContaFrame(cpf);
         ContaFrame.setVisible(true);
         return;
+        }
     }
 
     public void excluir(String cpf){
         dao.remover(cpf);
-        sair(cpf); //Consertar
+        cpf = "0";
+        sair(cpf); 
     }
 
     private void verificacao(JTextField password, JTextField newPassword, JTextField newPasswordConfirm, String cpf) {
