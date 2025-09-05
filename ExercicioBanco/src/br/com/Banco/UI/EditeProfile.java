@@ -131,7 +131,7 @@ public class EditeProfile extends JFrame {
     //#region FUNÇÕES 
     
     private void sair(String cpf) {
-        if(cpf.equals("0")){
+        if(cpf.equals("0")){ //CASO EXCLUA A CONTA
         this.dispose(); // fecha login
         MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);

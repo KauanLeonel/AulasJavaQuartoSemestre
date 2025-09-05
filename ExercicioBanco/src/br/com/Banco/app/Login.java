@@ -6,7 +6,7 @@ import java.util.List;
 import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.model.ContaCorrente;
 
-public class Inicializador {
+public class Login {
     static ContaCorrenteDao dao = new ContaCorrenteDao();
     // Carregar todos os dados.
 

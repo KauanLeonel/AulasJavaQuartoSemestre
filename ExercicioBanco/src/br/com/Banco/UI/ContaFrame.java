@@ -105,7 +105,7 @@ public class ContaFrame extends JFrame {
         try {
             Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
 
-            if (!numeroDaMovimentacao.getText().isEmpty() && numero > 0 && numero != null) {
+            if (!numeroDaMovimentacao.getText().isEmpty() && numero > 0 && numero != null) { //Se o valor não for nulo nem negativo
                 user.depositar(numero);
                 audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\Caixa-Registradora-Dinheiro.wav");
 
@@ -118,7 +118,7 @@ public class ContaFrame extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "INSIRA UM VALOR!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Insira um valor!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -151,12 +151,12 @@ public class ContaFrame extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "INSIRA UM VALOR!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Insira um valor!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
     }
 
-    private void salvar(ContaCorrente user) {
+    private void salvar(ContaCorrente user) { //Pelo visto, é importante, não tirar.
         try {
             dao.atualizar(user);
         } catch (Exception e) {

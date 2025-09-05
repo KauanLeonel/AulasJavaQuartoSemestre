@@ -3,7 +3,7 @@ package br.com.Banco.UI;
 import javax.swing.*;
 
 import br.com.Banco.Dao.ContaCorrenteDao;
-import br.com.Banco.app.Inicializador;
+import br.com.Banco.app.Login;
 import br.com.Banco.app.ReproduzirAudios;
 import br.com.Banco.app.SearchCpf;
 import br.com.Banco.app.validacaoCpf;
@@ -193,7 +193,7 @@ public class MainFrame extends JFrame {
         }
 
         // Se a senha e o cpf colidirem, entra na conta, se não, a senha está errada
-        if (Inicializador.verificacaoDeLogin(cpf, senha)) {
+        if (Login.verificacaoDeLogin(cpf, senha)) {
             audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\login.wav");
             cpfField.setText("");
             senhaField.setText("");
@@ -203,7 +203,7 @@ public class MainFrame extends JFrame {
             return;
         } else {
             audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\algoDeuErrado.wav");
-            JOptionPane.showMessageDialog(this, "CPF ou senha incorreto!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Senha incorreta!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -211,7 +211,9 @@ public class MainFrame extends JFrame {
         String cpf = novoCpfField.getText();
         String senha = new String(novaSenhaField.getPassword());
         String nome = novoNomeField.getText();
+
         validacaoCpf vali = new validacaoCpf();
+        
         // Erro de campos vazios
         if (cpf.isEmpty() || senha.isEmpty()) {
             audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\algoDeuErrado.wav");
