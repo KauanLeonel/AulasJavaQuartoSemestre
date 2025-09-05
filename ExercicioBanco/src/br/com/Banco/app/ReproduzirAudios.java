@@ -11,7 +11,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class ReproduzirAudios {
 
-    public static void reproduzirAudios(String caminho) {
+    public void reproduzirAudios(String caminho) {
 
         try {
              File arquivo = new File(caminho);

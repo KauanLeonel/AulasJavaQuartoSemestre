@@ -2,7 +2,6 @@ package br.com.Banco.UI;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,6 +13,7 @@ import javax.swing.JTextField;
 
 import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.Dao.TransferenciaDao;
+import br.com.Banco.app.SearchCpf;
 import br.com.Banco.model.ContaCorrente;
 
 public class TransferirFrame extends JFrame {
@@ -22,7 +22,7 @@ public class TransferirFrame extends JFrame {
     private JTextField numeroDaMovimentacao;
     private JTextField cpfRecebidor;
 
-    //Refatoração, APENAS DO FRONT(centralizar), pelo chatGPT
+    // Refatoração, APENAS DO FRONT(centralizar), pelo chatGPT
     public TransferirFrame(String cpf) {
         super("Transferir");
 
@@ -85,7 +85,6 @@ public class TransferirFrame extends JFrame {
 
     private void sair(String cpf) {
 
-        List<ContaCorrente> contas = dao.listar();
         this.dispose(); // fecha login
         ContaFrame frame = new ContaFrame(cpf);
         frame.setVisible(true);
@@ -93,9 +92,14 @@ public class TransferirFrame extends JFrame {
     }
 
     private void transferir(String cpf) {
+        SearchCpf search = new SearchCpf();
         try {
             String cpfRecebedor = new String(cpfRecebidor.getText()); // Recebedor
             ContaCorrente user = dao.buscaEspecifica(cpf); // Doador
+            if (search.search(cpfRecebedor) == false) {
+                JOptionPane.showMessageDialog(this, "Cpf inválido", "erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             TransferenciaDao transferenciaDao = new TransferenciaDao(); // API
             Double numero = Double.parseDouble(numeroDaMovimentacao.getText()); // Valor
             if (user.getSaldo() < numero) { // Se o saldo for menor que o valor

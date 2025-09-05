@@ -11,11 +11,13 @@ public class TransferenciaDao {
     public void transferir(String cpf, String cpfRecebedor, double valor) {
         String debitoSql = "UPDATE contacorrente set saldo = saldo - ? where cpf = ?";
         String creditoSql = "UPDATE contacorrente set saldo = saldo + ? where cpf = ?";
+        
 
         try (Connection conn = Conexao.getConnection()) {
             conn.setAutoCommit(false);
             try (PreparedStatement debito = conn.prepareStatement(debitoSql);
                     PreparedStatement credito = conn.prepareStatement(creditoSql)) {
+                        
                 debito.setDouble(1, valor);
                 debito.setString(2, cpf);
                 debito.executeUpdate();

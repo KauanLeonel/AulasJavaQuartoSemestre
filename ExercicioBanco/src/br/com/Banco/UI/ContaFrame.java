@@ -1,6 +1,5 @@
 package br.com.Banco.UI;
 
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,7 +18,6 @@ import br.com.Banco.model.ContaCorrente;
 
 public class ContaFrame extends JFrame {
 
-    private List<ContaCorrente> listaDeContas;
     private String cpf;
 
     private JLabel labelSaldo;
@@ -147,7 +145,7 @@ public class ContaFrame extends JFrame {
                 }
 
                 salvar(user);
-                labelSaldo.setText("Saldo: " + user.getSaldo()); //Atualiza o saldo
+                labelSaldo.setText("Saldo: " + user.getSaldo()); // Atualiza o saldo
             } else {
                 JOptionPane.showMessageDialog(this, "NÃO TENTE BURLAR MEU SISTEMA NÃO, VACILÃO!", "Erro",
                         JOptionPane.ERROR_MESSAGE);

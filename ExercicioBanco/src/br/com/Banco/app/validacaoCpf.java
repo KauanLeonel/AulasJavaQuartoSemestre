@@ -2,7 +2,7 @@ package br.com.Banco.app;
 
 public class validacaoCpf {
 
-    public static boolean validacao(String cpf) {
+    public boolean validacao(String cpf) {
         boolean vali = true;
         if (cpf.length() != 11)
             vali = false;

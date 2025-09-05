@@ -6,15 +6,15 @@ import br.com.Banco.model.ContaCorrente;
 public class SearchCpf {
 
     // Verifica se existe a conta.
-    public static int search(String cpf) {
+    public boolean search(String cpf) {
 
         // COM JDBC
         ContaCorrenteDao dao = new ContaCorrenteDao();
         ContaCorrente conta = dao.buscaEspecifica(cpf);
         if (conta.getTitular().equals("Teste")) {
-            return 1;
+            return false;
         } else {
-            return -10;
+            return true;
         }
 
     }

@@ -1,22 +1,18 @@
 package br.com.Banco.UI;
 
 import javax.swing.*;
-import java.util.List;
 
 import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.app.Inicializador;
 import br.com.Banco.app.ReproduzirAudios;
 import br.com.Banco.app.SearchCpf;
 import br.com.Banco.app.validacaoCpf;
-import br.com.Banco.model.Conta;
 import br.com.Banco.model.ContaCorrente;
 
 import java.awt.*;
-import java.awt.event.*;
 
 public class MainFrame extends JFrame {
 
-    private List<ContaCorrente> listaDeContas;
 
     private CardLayout cardLayout;
     private JPanel mainPanel;
@@ -36,7 +32,6 @@ public class MainFrame extends JFrame {
     // #region UI
     public MainFrame() {
         super("Banco - Sistema de Login");
-        this.listaDeContas = listaDeContas;
 
         // Áudio
         audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\welcome.wav");
@@ -192,7 +187,7 @@ public class MainFrame extends JFrame {
         }
 
         // Erro de cpf não encontrado
-        if (search.search(cpf) == 1) {
+        if (search.search(cpf) == false) {
             JOptionPane.showMessageDialog(this, "CPF não cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -225,7 +220,7 @@ public class MainFrame extends JFrame {
         }
 
         // Erro de cpf já cadastrado
-        if (procurar.search(cpf) != 1) {
+        if (procurar.search(cpf) == true) {
             JOptionPane.showMessageDialog(this, " CPF já cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }

@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,16 +16,14 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import br.com.Banco.Dao.ContaCorrenteDao;
-import br.com.Banco.app.SearchCpf;
-import br.com.Banco.model.Conta;
+
 import br.com.Banco.model.ContaCorrente;
 
 public class EditeProfile extends JFrame {
-    private List<ContaCorrente> listaDeContas;
+
     private JTextField nameLabel;
     private JTextField password;
     private JTextField newPassword;
-    private JTextField newPasswordConfirm;
     static ContaCorrenteDao dao = new ContaCorrenteDao();
 
     //#region  UI
@@ -47,7 +44,6 @@ public class EditeProfile extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10); // espaçamento entre os componentes
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        SearchCpf busca = new SearchCpf();
         ContaCorrente user = dao.buscaEspecifica(cpf);
 
         JLabel labelCpf = new JLabel("CPF:" + user.getCpf());
