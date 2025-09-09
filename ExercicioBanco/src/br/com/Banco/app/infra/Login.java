@@ -1,9 +1,9 @@
-package br.com.Banco.app;
+package br.com.Banco.app.infra;
 
 import java.io.IOException;
 import java.util.List;
 
-import br.com.Banco.Dao.ContaCorrenteDao;
+import br.com.Banco.dao.ContaCorrenteDao;
 import br.com.Banco.model.ContaCorrente;
 
 public class Login {

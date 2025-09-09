@@ -1,6 +1,6 @@
 package br.com.Banco.model;
 
-import br.com.Banco.Exception.SaldoInsuficienteException;
+import br.com.Banco.exception.SaldoInsuficienteException;
 
 public abstract class Conta {
 

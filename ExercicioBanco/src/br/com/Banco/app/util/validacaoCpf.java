@@ -1,4 +1,4 @@
-package br.com.Banco.app;
+package br.com.Banco.app.util;
 
 public class validacaoCpf {
 
