@@ -32,4 +32,10 @@ public class ContaCorrente extends Conta {
         setSaldo(getSaldo() + valor);
 
     }
+
+    @Override
+    public String toString() {
+        return String.format("CPF %s | Titular: %s | Saldo: R$ %.2f",
+                             getCpf(), getTitular(), getSaldo());
+    }
 }
