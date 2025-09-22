@@ -3,7 +3,7 @@ package br.com.Banco.service;
 import java.util.List;
 import java.util.function.Predicate;
 
-import br.com.Banco.dao.ContaCorrenteDao;
+import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.model.ContaCorrente;
 
 public class SalarioMaior5k {

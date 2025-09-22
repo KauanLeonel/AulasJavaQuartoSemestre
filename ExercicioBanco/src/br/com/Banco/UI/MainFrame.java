@@ -6,7 +6,7 @@ import br.com.Banco.app.infra.Login;
 import br.com.Banco.app.media.ReproduzirAudios;
 import br.com.Banco.app.util.SearchCpf;
 import br.com.Banco.app.util.validacaoCpf;
-import br.com.Banco.dao.ContaCorrenteDao;
+import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.model.ContaCorrente;
 
 import java.awt.*;

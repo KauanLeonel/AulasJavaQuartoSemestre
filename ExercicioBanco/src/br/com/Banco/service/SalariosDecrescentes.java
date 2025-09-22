@@ -2,7 +2,7 @@ package br.com.Banco.service;
 
 import java.util.List;
 
-import br.com.Banco.dao.ContaCorrenteDao;
+import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.model.ContaCorrente;
 
 public class SalariosDecrescentes {

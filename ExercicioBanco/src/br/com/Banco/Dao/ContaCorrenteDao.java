@@ -1,4 +1,4 @@
-package br.com.Banco.dao;
+package br.com.Banco.Dao;
 
 import java.util.ArrayList;
 import java.sql.*;

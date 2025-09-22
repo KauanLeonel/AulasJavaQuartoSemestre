@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import br.com.Banco.app.util.SearchCpf;
-import br.com.Banco.dao.ContaCorrenteDao;
-import br.com.Banco.dao.TransferenciaDao;
+import br.com.Banco.Dao.ContaCorrenteDao;
+import br.com.Banco.Dao.TransferenciaDao;
 import br.com.Banco.model.ContaCorrente;
 
 public class TransferirFrame extends JFrame {

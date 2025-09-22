@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import java.awt.*;
 
 import br.com.Banco.app.media.ReproduzirAudios;
-import br.com.Banco.dao.ContaCorrenteDao;
+import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.model.ContaCorrente;
 
 public class ContaFrame extends JFrame {
