@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import br.com.Banco.app.infra.SalvarExtrato;
 import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.Dao.ExtratoDao;
 
