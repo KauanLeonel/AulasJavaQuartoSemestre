@@ -10,9 +10,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 import br.com.Banco.app.media.ReproduzirAudios;
-import br.com.Banco.dao.ContaCorrenteDao;
+import br.com.Banco.Dao.ContaCorrenteDao;
+import br.com.Banco.Dao.ExtratoDao;
 import br.com.Banco.model.ContaCorrente;
 
 public class ContaFrame extends JFrame {
@@ -35,7 +37,7 @@ public class ContaFrame extends JFrame {
         setIconImage(icon.getImage());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 350);
+        setSize(400, 400);
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -92,6 +94,11 @@ public class ContaFrame extends JFrame {
         btnTransferir.addActionListener(e -> transferir());
         panel.add(btnTransferir);
 
+        JButton btnExtrato = new JButton("Extrato");
+        btnExtrato.setBounds(50, 310, 270, 30);
+        btnExtrato.addActionListener(e -> extrato());
+        panel.add(btnExtrato);
+
         add(panel);
 
     }
@@ -123,6 +130,7 @@ public class ContaFrame extends JFrame {
     }
 
     private void sacar(ContaCorrente user) {
+        
 
         try {
             Double numero = Double.parseDouble(numeroDaMovimentacao.getText());
@@ -169,6 +177,17 @@ public class ContaFrame extends JFrame {
         this.dispose(); // fecha login
         TransferirFrame transferirFrame = new TransferirFrame(cpf);
         transferirFrame.setVisible(true);
+        return;
+    }
+    private void extrato() {
+        ExtratoDao extratoDao = new ExtratoDao();
+        ArrayList<String> teste = extratoDao.listarExtrato(cpf);
+        for (int i = 0; i < teste.size(); i++) {
+            System.out.println(teste.get(i));
+        }
+        this.dispose(); // fecha login
+        ExtratoFrame extratoFrame = new ExtratoFrame(cpf);
+        extratoFrame.setVisible(true);
         return;
     }
 

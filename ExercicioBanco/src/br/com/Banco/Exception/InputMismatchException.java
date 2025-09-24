@@ -1,4 +1,4 @@
-package br.com.Banco.exception;
+package br.com.Banco.Exception;
 
 public class InputMismatchException extends Exception {
     public InputMismatchException (String mensagem){

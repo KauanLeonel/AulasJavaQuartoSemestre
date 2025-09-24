@@ -16,3 +16,15 @@ Meanwhile, the compiled output files will be generated in the `bin` folder by de
 ## Dependency Management
 
 The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+
+
+CRIAR TABELA PROVA 
+
+create table movimentacoes (
+	id int auto_increment primary KEY,
+    cpf varchar(11) not null,
+    tipo varchar(20) not null,
+    valor double not null,
+    dia timestamp default current_timestamp,
+    foreign key (cpf) references contacorrente(cpf)
+);

@@ -6,13 +6,12 @@ import br.com.Banco.app.infra.Login;
 import br.com.Banco.app.media.ReproduzirAudios;
 import br.com.Banco.app.util.SearchCpf;
 import br.com.Banco.app.util.validacaoCpf;
-import br.com.Banco.dao.ContaCorrenteDao;
+import br.com.Banco.Dao.ContaCorrenteDao;
 import br.com.Banco.model.ContaCorrente;
 
 import java.awt.*;
 
 public class MainFrame extends JFrame {
-
 
     private CardLayout cardLayout;
     private JPanel mainPanel;
@@ -213,7 +212,7 @@ public class MainFrame extends JFrame {
         String nome = novoNomeField.getText();
 
         validacaoCpf vali = new validacaoCpf();
-        
+
         // Erro de campos vazios
         if (cpf.isEmpty() || senha.isEmpty()) {
             audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\algoDeuErrado.wav");
@@ -227,7 +226,7 @@ public class MainFrame extends JFrame {
             return;
         }
 
-        //Se o cpf é válido ele cadastra
+        // Se o cpf é válido ele cadastra
         if (vali.validacao(cpf)) {
             ContaCorrente conta = new ContaCorrente(cpf, nome, 0, senha);
             dao.inserir(conta);

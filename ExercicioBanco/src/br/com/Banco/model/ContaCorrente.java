@@ -1,10 +1,12 @@
 package br.com.Banco.model;
 
 
-import br.com.Banco.exception.SaldoInsuficienteException;
+import br.com.Banco.Dao.ContaCorrenteDao;
+import br.com.Banco.Exception.SaldoInsuficienteException;
 
 public class ContaCorrente extends Conta {
     private String senha;
+    ContaCorrenteDao dao = new ContaCorrenteDao();
 
     public String getSenha() {
         return senha;
@@ -25,11 +27,18 @@ public class ContaCorrente extends Conta {
         if(valor > getSaldo())
         throw new SaldoInsuficienteException("Saldo insuficiente");
         setSaldo(getSaldo() - valor);
+        dao.Movimentacao(getCpf(), "Saque", valor);
     }
 
     @Override
     public void depositar(double valor) {
         setSaldo(getSaldo() + valor);
+        dao.Movimentacao(getCpf(), "Deposito", valor);
+    }
 
+    @Override
+    public String toString() {
+        return String.format("CPF %s | Titular: %s | Saldo: R$ %.2f",
+                             getCpf(), getTitular(), getSaldo());
     }
 }

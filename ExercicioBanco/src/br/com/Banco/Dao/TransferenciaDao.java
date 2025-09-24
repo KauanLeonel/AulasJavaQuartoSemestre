@@ -1,4 +1,4 @@
-package br.com.Banco.dao;
+package br.com.Banco.Dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,13 +11,12 @@ public class TransferenciaDao {
     public void transferir(String cpf, String cpfRecebedor, double valor) {
         String debitoSql = "UPDATE contacorrente set saldo = saldo - ? where cpf = ?";
         String creditoSql = "UPDATE contacorrente set saldo = saldo + ? where cpf = ?";
-        
 
         try (Connection conn = Conexao.getConnection()) {
             conn.setAutoCommit(false);
             try (PreparedStatement debito = conn.prepareStatement(debitoSql);
                     PreparedStatement credito = conn.prepareStatement(creditoSql)) {
-                        
+
                 debito.setDouble(1, valor);
                 debito.setString(2, cpf);
                 debito.executeUpdate();
@@ -28,6 +27,10 @@ public class TransferenciaDao {
 
                 conn.commit();
                 System.out.println("Transferência realizada com sucesso");
+
+                // Extrato
+                dao.Movimentacao(cpf, "Transferência", valor - (2 * valor));
+                dao.Movimentacao(cpfRecebedor, "Transferência", valor);
             } catch (Exception e) {
                 conn.rollback();
                 System.err.println("Erro na transação. Rollback realizado!");

@@ -1,4 +1,4 @@
-package br.com.Banco.dao;
+package br.com.Banco.Dao;
 
 import java.util.ArrayList;
 import java.sql.*;
@@ -22,6 +22,56 @@ public class ContaCorrenteDao {
                     stmt.setString(2, contaCorrente.getTitular());
                     stmt.setDouble(3, contaCorrente.getSaldo());
                     stmt.setString(4, contaCorrente.getSenha());
+                    stmt.executeUpdate();
+                } catch (Throwable var9) {
+                    if (stmt != null) {
+                        try {
+                            stmt.close();
+                        } catch (Throwable var8) {
+                            var9.addSuppressed(var8);
+                        }
+                    }
+
+                    throw var9;
+                }
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (Throwable var10) {
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (Throwable var7) {
+                        var10.addSuppressed(var7);
+                    }
+
+                }
+                throw var10;
+            }
+
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException var11) {
+            var11.printStackTrace();
+        }
+
+    }
+
+    // Adicionar ao Extrato
+    public void Movimentacao(String cpf, String tipo, double valor) {
+        String sql = "INSERT INTO movimentacoes(cpf, tipo, valor) VALUES (?, ?, ?)";
+
+        try {
+            Connection conn = Conexao.getConnection();
+            try {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+
+                try {
+                    stmt.setString(1, cpf);
+                    stmt.setString(2, tipo);
+                    stmt.setDouble(3, valor);
                     stmt.executeUpdate();
                 } catch (Throwable var9) {
                     if (stmt != null) {
