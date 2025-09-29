@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class Conexao {
    private static final String URL = "jdbc:mysql://localhost:3306/contas";
    private static final String USER = "root";
-   //private static final String PASSWORD = "Aluno"; // No trabalho
-   private static final String PASSWORD = "aluno"; // No IF
+   private static final String PASSWORD = "Aluno"; // No trabalho
+   //private static final String PASSWORD = "aluno"; // No IF
 
    public Conexao() {
    }
