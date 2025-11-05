@@ -16,7 +16,6 @@ public class ThreadSaida extends Thread {
         System.out.println("Thread Saida ligada");
 
         while (teclado.hasNextLine()) {
-            System.out.println("Thread Saida ligada");
             System.out.print("Digite algo a ser enviado ao servidor: ");
             saida.println(teclado.nextLine());
             String linha = teclado.nextLine();

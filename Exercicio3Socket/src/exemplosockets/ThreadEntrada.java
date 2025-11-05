@@ -19,7 +19,6 @@ public class ThreadEntrada extends Thread {
     }
 
     public void run() {
-        System.out.println("Thread ligada");
        while (entrada.hasNextLine()) {
        System.out.println("O cliente digitou: " + entrada.nextLine());
      }
