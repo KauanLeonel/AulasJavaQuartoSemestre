@@ -13,12 +13,12 @@ import java.util.Scanner;
  * @author cg080111
  */
 public class ThreadEntrada extends Thread {
-    static Scanner entrada;
+    Scanner entrada;
     ThreadEntrada(Scanner entrada){
         this.entrada = entrada;
     }
 
-    public static void run(String[] args) {
+    public void run() {
         System.out.println("Thread ligada");
        while (entrada.hasNextLine()) {
        System.out.println("O cliente digitou: " + entrada.nextLine());
