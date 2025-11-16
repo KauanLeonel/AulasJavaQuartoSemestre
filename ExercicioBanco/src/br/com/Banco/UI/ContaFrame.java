@@ -137,18 +137,17 @@ public class ContaFrame extends JFrame {
 
             if (!numeroDaMovimentacao.getText().isEmpty() && numero > 0) {
                 try {
-                    if (numero > 1000)
+                        
+                    user.sacar(numero);
+                    JOptionPane.showMessageDialog(this, "Saque de R$ " + numero + " feito!");
+                     if (numero > 1000)
                         audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\eu-quero-eu-posso-cariani_095031.wav");
                     else
                         audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\classic_hurt.wav");
-
-                    user.sacar(numero);
-                    JOptionPane.showMessageDialog(this, "Saque de R$ " + numero + " feito!");
-
                 } catch (Exception e) {
-                    audio.reproduzirAudios("ssrc\\br\\com\\Banco\\Audios\\n" + //
+                    audio.reproduzirAudios("src\\br\\com\\Banco\\Audios\\n" + //
                             "ao-consegue-ne_233542.wav");
-
+                    JOptionPane.showMessageDialog(this, "Saldo Insuficiente!", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
 
                 salvar(user);
